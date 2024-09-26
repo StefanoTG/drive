@@ -1,22 +1,32 @@
-# Inside configure_bot function in setup_and_run.py
-def configure_bot():
-    print("Please update your configuration details:")
-    bot_token = input("Enter your Telegram Bot Token: ")
-    admin_ids = input("Enter your Admin IDs (comma-separated): ").split(',')
-    json_path = input("Enter path to your service account JSON file: ")
+import os
+import json
+import subprocess
 
-    # Verify the JSON file exists
-    if not os.path.exists(json_path):
-        print(f"Service account file not found at: {json_path}. Please ensure the path is correct.")
-        exit(1)
+CONFIG_FILE = 'config.json'
 
-    # Save the configuration
-    config = {
-        "bot_token": bot_token.strip(),
-        "admin_ids": [int(admin_id.strip()) for admin_id in admin_ids if admin_id.strip().isdigit()],
-        "json_path": json_path.strip()
+def create_config():
+    config_template = {
+        "bot_token": "YOUR_BOT_TOKEN_HERE",
+        "admin_ids": [123456789, 2128987754],
+        "service_account_file": "/path/to/your/service_account.json",
+        "google_email": "your-email@example.com"
     }
+    
+    if not os.path.exists(CONFIG_FILE):
+        with open(CONFIG_FILE, 'w') as file:
+            json.dump(config_template, file, indent=4)
+        print(f"Configuration file '{CONFIG_FILE}' created. Please fill in your details.")
 
-    with open("config.json", "w") as f:
-        json.dump(config, f, indent=4)
-    print("Configuration saved successfully.")
+def install_requirements():
+    if os.path.exists('requirements.txt'):
+        subprocess.run(["pip3", "install", "-r", "requirements.txt"], check=True)
+    else:
+        print("requirements.txt not found.")
+
+def run_script():
+    subprocess.run(["python3", "drive.py"])
+
+if __name__ == "__main__":
+    create_config()
+    install_requirements()
+    run_script()
