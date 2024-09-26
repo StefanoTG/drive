@@ -11,21 +11,29 @@ import requests
 # Load configuration from config.json
 CONFIG_FILE = 'config.json'
 
-if not os.path.exists(CONFIG_FILE):
-    print(f"Configuration file {CONFIG_FILE} not found. Please run setup_drive.py first.")
+if os.path.exists(CONFIG_FILE):
+    with open(CONFIG_FILE, 'r') as config_file:
+        config = json.load(config_file)
+    BOT_TOKEN = config.get("bot_token")
+    ADMIN_IDS = config.get("admin_ids", [])
+    SERVICE_ACCOUNT_FILE = config.get("json_path")  # Path to the service account file
+else:
+    print(f"Configuration file {CONFIG_FILE} not found. Please run the setup script.")
     exit(1)
 
-with open(CONFIG_FILE, 'r') as config_file:
-    config = json.load(config_file)
-
-# Configuration values from config.json
-ADMIN_IDS = config.get('admin_ids', [])
-YOUR_GOOGLE_EMAIL = 'mekangldv@gmail.com'  # Your Google email, keep this static if required
-SERVICE_ACCOUNT_FILE = config.get('service_account_file')
+# Google Drive API setup
 SCOPES = ['https://www.googleapis.com/auth/drive.file']
 
-# Set up Google Drive API credentials
-creds = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+try:
+    # Ensure the path is correct and the file exists
+    if not os.path.exists(SERVICE_ACCOUNT_FILE):
+        print(f"Service account file not found at: {SERVICE_ACCOUNT_FILE}")
+        exit(1)
+    creds = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+except Exception as e:
+    print(f"Error loading service account credentials: {e}")
+    exit(1)
+
 service = build('drive', 'v3', credentials=creds)
 bot_token = config.get('bot_token')
 
