@@ -1,58 +1,49 @@
 import os
-import json
 import subprocess
 
-CONFIG_FILE = 'config.json'
-DRIVE_SCRIPT = 'drive.py'
+# URLs for the scripts
+DRIVE_SCRIPT_URL = "https://raw.githubusercontent.com/StefanoTG/drive/main/drive.py"  # Update with your correct URL
 
-# Required dependencies
-REQUIRED_PACKAGES = [
-    "google-auth",
-    "google-auth-oauthlib",
-    "google-auth-httplib2",
-    "google-api-python-client",
-    "python-telegram-bot==21.5",
-    "requests",
-]
+# Step 1: Download drive.py
+def download_script(url, filename):
+    print(f"Downloading {filename}...")
+    result = subprocess.run(["wget", url, "-O", filename], check=True)
+    if result.returncode == 0:
+        print(f"{filename} downloaded successfully.")
+    else:
+        print(f"Failed to download {filename}.")
+        exit(1)
 
-def install_packages():
-    """Install the required packages using pip."""
+# Step 2: Install requirements
+def install_requirements():
     print("Installing required packages...")
-    subprocess.check_call(["pip", "install"] + REQUIRED_PACKAGES)
-    print("Packages installed successfully.")
+    subprocess.run(["pip3", "install", "-r", "requirements.txt"], check=True)
 
-def create_config():
-    """Create the config.json file with user inputs."""
-    print("Creating config.json file...")
-    config = {}
+# Step 3: Prompt user for configurations
+def configure_bot():
+    print("Please update your configuration details:")
+    bot_token = input("Enter your Telegram Bot Token: ")
+    admin_ids = input("Enter your Admin IDs (comma-separated): ").split(',')
+    json_path = input("Enter path to your service account JSON file: ")
 
-    # Prompt the user for input
-    config['bot_token'] = input("Enter your Telegram bot token: ")
-    admin_ids = input("Enter admin user IDs (comma-separated): ")
-    config['admin_ids'] = [int(id.strip()) for id in admin_ids.split(',')]
-    config['service_account_file'] = input("Enter the path to your Google service account JSON file: ")
+    # Create a config file with user inputs
+    config = {
+        "bot_token": bot_token.strip(),
+        "admin_ids": [int(admin_id.strip()) for admin_id in admin_ids],
+        "json_path": json_path.strip()
+    }
 
-    # Write the configuration to the JSON file
-    with open(CONFIG_FILE, 'w') as file:
-        json.dump(config, file, indent=4)
-    print(f"Configuration saved to {CONFIG_FILE}.")
+    with open("config.json", "w") as f:
+        json.dump(config, f, indent=4)
+    print("Configuration saved successfully.")
 
-def run_drive_script():
-    """Run the drive.py script."""
+# Step 4: Run the bot
+def run_bot():
     print("Starting the bot...")
-    subprocess.run(["python3", DRIVE_SCRIPT])
+    subprocess.run(["python3", "drive.py"])
 
-def main():
-    """Main function to set up and run the bot."""
-    # Check if config.json exists; if not, create it
-    if not os.path.exists(CONFIG_FILE):
-        create_config()
-    
-    # Install required packages
-    install_packages()
-    
-    # Run the bot script
-    run_drive_script()
-
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    download_script(DRIVE_SCRIPT_URL, "drive.py")
+    install_requirements()
+    configure_bot()
+    run_bot()
