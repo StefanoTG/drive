@@ -7,20 +7,24 @@ Update Subscriptions: Keep your v2ray subscriptions up to date with the latest c
 Manage Subscriptions: Add, list, and remove subscriptions effortlessly.
 Multi-Language Support: Choose your preferred language—English, Russian, or Turkish—to get started quickly.
 Admin Controls: Specific commands are restricted to admins, ensuring that your subscription data remains secure.
+
 🛠️ Commands
 /start: Initializes the bot and lets you choose from options: Create, Remove, Update, and List subscriptions.
 /create: Add a new v2ray subscription URL.
 /remove: Remove an existing subscription by providing the URL.
 /update: Update all stored subscriptions in Google Drive.
 /list: List all current subscriptions stored in the bot.
+
 📋 How to Use
 Start the Bot: Type /start in Telegram to initialize the bot and see the main menu.
 Upload Your Subscription: Click on "Create" and enter your v2ray subscription URL.
 Manage Subscriptions: Use the "Remove" or "List" buttons to manage your stored subscriptions easily.
 Update Subscriptions: Use the "Update" button to refresh your subscriptions and ensure you’re always using the latest configurations.
+
 🔒 Security & Permissions
 Private Access: The bot is private and accessible only by authorized users.
 Admin Controls: Special functions like updating subscriptions are restricted to the bot's admins, ensuring secure operations.
+
 📞 Support
 For assistance or to learn more about the bot, feel free to contact the admin: @Old_Stefano.
 
