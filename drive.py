@@ -9,13 +9,13 @@ import asyncio
 import requests
 
 # Admin user IDs
-ADMIN_IDS = [6821157094, 2128987754]  # Add multiple admins here
+ADMIN_IDS = [admin1, admin2]  # Add multiple admins here
 
 # Your Google email address
 YOUR_GOOGLE_EMAIL = 'mekangldv@gmail.com'  # Your Google email
 
 # Set up Google Drive API
-SERVICE_ACCOUNT_FILE = '/etc/coherent-cinema-435804-k7-8d34b05aa323.json'  # Service account credentials file
+SERVICE_ACCOUNT_FILE = 'path/to/your/jsonfile.json'  # Service account credentials file
 SCOPES = ['https://www.googleapis.com/auth/drive.file']
 
 creds = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
@@ -269,7 +269,7 @@ async def update_all_subscriptions(update: Update, context):
 # Set up Telegram bot
 async def main():
     """Set up and start the bot."""
-    application = Application.builder().token("7109299104:AAGNJ5nhMftc6Ln-Cbc2ARRIEuf0bOvLb2E").build()
+    application = Application.builder().token("Telegram-bot-token").build()
 
     # Register handlers
     application.add_handler(CommandHandler("start", start))
