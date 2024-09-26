@@ -18,6 +18,13 @@ def download_script(url, filename):
 # Step 2: Install requirements
 def install_requirements():
     print("Installing required packages...")
+    if not os.path.exists("requirements.txt"):
+        print("Creating requirements.txt file...")
+        with open("requirements.txt", "w") as req_file:
+            req_file.write("python-telegram-bot==21.5\n")
+            req_file.write("google-auth==2.22.0\n")
+            req_file.write("google-api-python-client==2.98.0\n")
+            req_file.write("requests==2.31.0\n")
     subprocess.run(["pip3", "install", "-r", "requirements.txt"], check=True)
 
 # Step 3: Prompt user for configurations
