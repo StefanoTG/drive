@@ -8,18 +8,26 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 import asyncio
 import requests
 
-# Admin user IDs
-ADMIN_IDS = [admin1, admin2]  # Add multiple admins here
+# Load configuration from config.json
+CONFIG_FILE = 'config.json'
 
-# Your Google email address
-YOUR_GOOGLE_EMAIL = 'mekangldv@gmail.com'  # Your Google email
+if not os.path.exists(CONFIG_FILE):
+    print(f"Configuration file {CONFIG_FILE} not found. Please run setup_drive.py first.")
+    exit(1)
 
-# Set up Google Drive API
-SERVICE_ACCOUNT_FILE = 'path/to/your/jsonfile.json'  # Service account credentials file
+with open(CONFIG_FILE, 'r') as config_file:
+    config = json.load(config_file)
+
+# Configuration values from config.json
+ADMIN_IDS = config.get('admin_ids', [])
+YOUR_GOOGLE_EMAIL = 'mekangldv@gmail.com'  # Your Google email, keep this static if required
+SERVICE_ACCOUNT_FILE = config.get('service_account_file')
 SCOPES = ['https://www.googleapis.com/auth/drive.file']
 
+# Set up Google Drive API credentials
 creds = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
 service = build('drive', 'v3', credentials=creds)
+bot_token = config.get('bot_token')
 
 # File and URL management
 SUBSCRIPTIONS_FILE = 'subscriptions.json'
@@ -269,7 +277,7 @@ async def update_all_subscriptions(update: Update, context):
 # Set up Telegram bot
 async def main():
     """Set up and start the bot."""
-    application = Application.builder().token("Telegram-bot-token").build()
+    application = Application.builder().token(bot_token).build()
 
     # Register handlers
     application.add_handler(CommandHandler("start", start))
