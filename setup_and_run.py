@@ -1,17 +1,18 @@
 import os
 import subprocess
+import json
 
 # URLs for the scripts
-DRIVE_SCRIPT_URL = "https://raw.githubusercontent.com/StefanoTG/drive/main/drive.py"  # Update with your correct URL
+DRIVE_SCRIPT_URL = "https://raw.githubusercontent.com/StefanoTG/drive/main/drive.py"  # Ensure this URL is correct
 
 # Step 1: Download drive.py
 def download_script(url, filename):
     print(f"Downloading {filename}...")
     result = subprocess.run(["wget", url, "-O", filename], check=True)
-    if result.returncode == 0:
+    if result.returncode == 0 and os.path.exists(filename):
         print(f"{filename} downloaded successfully.")
     else:
-        print(f"Failed to download {filename}.")
+        print(f"Failed to download {filename}. Please check the URL.")
         exit(1)
 
 # Step 2: Install requirements
@@ -40,7 +41,10 @@ def configure_bot():
 # Step 4: Run the bot
 def run_bot():
     print("Starting the bot...")
-    subprocess.run(["python3", "drive.py"])
+    if os.path.exists("drive.py"):
+        subprocess.run(["python3", "drive.py"])
+    else:
+        print("Error: drive.py file not found. Please check the download step.")
 
 if __name__ == "__main__":
     download_script(DRIVE_SCRIPT_URL, "drive.py")
